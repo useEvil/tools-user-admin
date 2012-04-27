@@ -1,0 +1,368 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal">
+    <head>
+        <title>User Admin Tool</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <meta name="keywords" content="python web application tool" />
+        <meta name="description" content="pyramid web application" />
+        <link rel="shortcut icon" href="${request.static_url('useradmin:static/images/favicon.ico')}" />
+        <link rel="stylesheet" href="${request.static_url('useradmin:static/css/user-admin.css')}" type="text/css" media="screen" charset="utf-8" />
+        <link rel="stylesheet" href="${request.static_url('useradmin:static/css/ui-lightness/jquery-ui.css')}" type="text/css" media="screen" charset="utf-8" />
+        <link rel="stylesheet" href="${request.static_url('useradmin:static/css/ui.daterangepicker.css')}" type="text/css" media="screen" charset="utf-8" />
+        <link rel="stylesheet" href="${request.static_url('useradmin:static/js/flexigrid/css/flexigrid/flexigrid.css')}" type="text/css" media="screen" charset="utf-8" />
+        <!--[if lte IE 6]>
+        <link rel="stylesheet" href="${request.static_url('useradmin:static/ie6.css')}" type="text/css" media="screen" charset="utf-8" />
+        <![endif]-->
+    </head>
+    <body>
+        <!-- The dark background -->
+        <div class="background-cover">&nbsp;</div>
+        <div class="background-cover-top">&nbsp;</div>
+        <div id="overlay-box-loading" class="overlay-loading">
+            <p>Processing&nbsp;...&nbsp;Please Wait</p>
+        </div>
+        <div id="wrap">
+            <div id="top">
+                <div class="top align-center">
+                    <h1>User Admin Tool</h1>
+                </div>
+            </div>
+            <div id="middle">
+                <table id="users" style="display: none;"></table>
+            </div>
+            <div id="bottom">
+                <div class="bottom">
+                    <div id="overlay-box-user" class="overlay-box">
+                        <div class="overlay-content">
+                            <form id="user-form">
+                                <fieldset class="form">
+                                <legend id="title">{Add|Edit|View}</legend>
+                                <div class="wrapper">
+                                    <ul>
+                                        <li class="edit-form view-form">
+                                            <label for="userID" id="userIDLabel">ID</label>
+                                            <input type="text" class="input select-menu" id="userId" name="userId" value="" readonly="readonly" />
+                                        </li>
+                                        <li>
+                                            <label for="userUserName" id="userUserNameLabel">Username</label>
+                                            <input type="text" class="input select-menu" id="userUserName" name="userName" size="100" maxlength="255" />
+                                        </li>
+                                        <li>
+                                            <label for="userFirstName" id="userFirstNameLabel">First Name</label>
+                                            <input type="text" class="input select-menu" id="userFirstName" name="firstName" size="100" maxlength="255" />
+                                        </li>
+                                        <li>
+                                            <label for="userLastName" id="userLastNameLabel">Last Name</label>
+                                            <input type="text" class="input select-menu" id="userLastName" name="lastName" size="100" maxlength="255" />
+                                        </li>
+                                        <li>
+                                            <label for="userEmailAddress" id="userEmailAddressLabel">Email Address</label>
+                                            <input type="text" class="input select-menu" id="userEmailAddress" name="emailAddress" size="100" maxlength="500" />
+                                        </li>
+                                        <li>
+                                            <label for="userEffectiveStartDate" id="userEffectiveStartDateLabel">Effective Start Date</label>
+                                            <input type="text" class="input select-menu" id="userEffectiveStartDate" name="effectiveStartDate" value="" />
+                                        </li>
+                                        <li>
+                                            <label for="userEffectiveEndDate" id="userEffectiveEndDateLabel">Effective End Date</label>
+                                            <input type="text" class="input select-menu" id="userEffectiveEndDate" name="effectiveEndDate" value="" />
+                                        </li>
+                                        <li class="edit-form view-form">
+                                            <label for="userActionType">Action Type</label>
+                                            <input type="text" class="input select-menu" id="userActionType" name="actionType" size="10" maxlength="6" readonly="readonly" />
+                                        </li>
+                                        <li class="edit-form view-form">
+                                            <label for="userCreatedDate">Created Date</label>
+                                            <input type="text" class="input select-menu date" id="userCreatedDate" name="createdDate" size="15" readonly="readonly" />
+                                        </li>
+                                        <li class="edit-form view-form">
+                                            <label for="userUpdatedDate">Updated Date</label>
+                                            <input type="text" class="input select-menu date" id="userUpdatedDate" name="updatedDate" size="15" readonly="readonly" />
+                                        </li>
+                                        <li class="edit-form view-form">
+                                            <label for="userUpdatedBy">Updated By</label>
+                                            <input type="text" class="input select-menu" id="userUpdatedBy" name="updatedBy" size="15" readonly="readonly" />
+                                        </li>
+                                        <li>
+                                            <label for="type">Groups</label>
+                                            <select multiple="multiple" id="user_group" name="user_group" size="8"></select>
+                                            <p class="add-remove">
+                                                <input type="image" src="/static/images/delete.png" class="remove_group" id="remove_user_group" onClick="return false;" style="position: relative;left: 222px;" />
+                                                <input type="image" src="/static/images/add.png" class="show_groups" id="show_user_group" onClick="return false;" style="position: relative;left: 222px;" />
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <input type="hidden" class="limit" id="userLimit" name="limit" tal:attributes="value limit" />
+                                            <input type="button" class="control input submit_details" id="submit_user" value=" Submit " />
+                                            <input type="button" class="control input cancel_details cancel_button" id="cancel_user" value=" Cancel " />
+                                        </li>
+                                    </ul>
+                                </div>
+                                </fieldset>
+                            </form>
+                            <form id="user_group_menu" class="none">
+                                <fieldset>
+                                <legend id="title">Add Group</legend>
+                                <div class="wrapper">
+                                    <ul>
+                                        <li>
+                                            <select multiple="multiple" id="user_groups" name="user_groups" size="10">
+                                                <option tal:repeat="group groups" tal:attributes="value group.id" tal:content="group.groupName"></option>
+                                            </select>
+                                        </li>
+                                        <li class="add-remove">
+                                            <input type="button" class="control input add_group" id="add_user_group" value=" Add " />
+                                            <input type="button" class="control input show_groups" id="close_user_group" value=" Close " />
+                                        </li>
+                                    </ul>
+                                </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="overlay-box-application" class="overlay-box">
+                        <div class="overlay-content">
+                            <form id="application-form" action="/admin/application">
+                                <fieldset class="form">
+                                <legend id="title">Manage Applications</legend>
+                                <ul>
+                                    <li>
+                                        <label for="type">Current Applications</label>
+                                        <select class="input-column show_selected" id="application" name="application" readonly="readonly">
+                                            <option value="0">New Application</option>
+                                        </select>
+                                    </li>
+                                    <li id="application_id" class="none">
+                                        <label for="name">Application ID</label>
+                                        <input type="text" class="input-column" id="applicationId" name="objectId" size="15" maxlength="15" readonly="readonly" />
+                                    </li>
+                                    <li>
+                                        <label for="name">Application Name</label>
+                                        <input type="text" class="input-column" id="applicationName" name="objectName" size="25" maxlength="25" />
+                                    </li>
+                                </ul>
+                                <div class="form-controls">
+                                    <input type="button" class="cancel control input cancel_details cancel_button" id="cancel_application" value=" Cancel " style="position: relative;left: 220px;" />
+                                    <input type="button" class="create control input submit_details" id="submit_application" value=" Submit " style="position: relative;left: 220px;" />
+                                    <input type="button" class="delete control input delete_details" id="delete_application" value=" Delete " style="position: relative;left: 220px;" />
+                                </div>
+                                </fieldset>
+                                <input type="hidden" id="form" name="form" value="application" />
+                                <input type="hidden" id="applicationAction" name="action" value="created" />
+                                <input type="hidden" class="limit" id="applicationLimit" name="limit" tal:attributes="value limit" />
+                            </form>
+                        </div>
+                    </div>
+                    <div id="overlay-box-permission" class="overlay-box">
+                        <div class="overlay-content">
+                            <form id="permission-form" action="/admin/permission">
+                                <fieldset class="form">
+                                <legend id="title">Manage Permissions</legend>
+                                <ul>
+                                    <li>
+                                        <label for="type">Current Permissions</label>
+                                        <select class="input-column show_selected" id="permission" name="permission" readonly="readonly">
+                                            <option value="0">New Permission</option>
+                                        </select>
+                                    </li>
+                                    <li id="permission_id" class="none">
+                                        <label for="name">Permission ID</label>
+                                        <input type="text" class="input-column" id="permissionId" name="objectId" size="15" maxlength="15" readonly="readonly" />
+                                    </li>
+                                    <li>
+                                        <label for="name">Permission Name</label>
+                                        <input type="text" class="input-column" id="permissionName" name="objectName" size="25" maxlength="25" />
+                                    </li>
+                                </ul>
+                                <div class="form-controls">
+                                    <input type="button" class="admin control input cancel_details cancel_button" id="cancel_permission" value=" Cancel " style="position: relative;left: 220px;" />
+                                    <input type="button" class="admin control input submit_details" id="submit_permission" value=" Submit " style="position: relative;left: 220px;" />
+                                    <input type="button" class="admin control input delete_details" id="delete_permission" value=" Delete " style="position: relative;left: 220px;" />
+                                </div>
+                                </fieldset>
+                                <input type="hidden" id="form" name="form" value="permission" />
+                                <input type="hidden" id="permissionAction" name="action" value="created" />
+                                <input type="hidden" class="limit" id="permissionLimit" name="limit" tal:attributes="value limit" />
+                            </form>
+                        </div>
+                    </div>
+                    <div id="overlay-box-group" class="overlay-box">
+                        <div class="overlay-content">
+                            <form id="group-form" action="/admin/group">
+                                <fieldset class="form">
+                                <legend id="title">Manage Groups</legend>
+                                <ul>
+                                    <li>
+                                        <label for="type">Current Groups</label>
+                                        <select class="input-column show_selected" id="group" name="group" readonly="readonly">
+                                            <option value="0">New Group</option>
+                                        </select>
+                                    </li>
+                                    <li id="group_id" class="none">
+                                        <label for="name">Group ID</label>
+                                        <input type="text" class="input-column" id="groupId" name="objectId" size="15" maxlength="15" readonly="readonly" />
+                                    </li>
+                                    <li>
+                                        <label for="name">Group Name</label>
+                                        <input type="text" class="input-column" id="groupName" name="objectName" size="25" maxlength="25" />
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li>
+                                        <label for="type">Applications</label>
+                                        <select multiple="multiple" id="application_group" name="application_group" size="8"></select>
+                                        <p class="add-remove">
+                                            <input type="image" src="/static/images/delete.png" class="remove_group" id="remove_application_group" onClick="return false;" style="position: relative;left: 222px;" />
+                                            <input type="image" src="/static/images/add.png" class="show_groups" id="show_application_group" onClick="return false;" style="position: relative;left: 222px;" />
+                                        </p>
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li>
+                                        <label for="type">Permissions</label>
+                                        <select multiple="multiple" id="permission_group" name="permission_group" size="8"></select>
+                                        <p class="add-remove">
+                                            <input type="image" src="/static/images/delete.png" class="remove_group" id="remove_permission_group" onClick="return false;" style="position: relative;left: 222px;" />
+                                            <input type="image" src="/static/images/add.png" class="show_groups" id="show_permission_group" onClick="return false;" style="position: relative;left: 222px;" />
+                                        </p>
+                                    </li>
+                                </ul>
+                                <div class="form-controls">
+                                    <input type="button" class="admin control input cancel_details cancel_button" id="cancel_group" value=" Cancel " style="position: relative;left: 220px;" />
+                                    <input type="button" class="admin control input submit_details" id="submit_group" value=" Submit " style="position: relative;left: 220px;" />
+                                    <input type="button" class="admin control input delete_details" id="delete_group" value=" Delete " style="position: relative;left: 220px;" />
+                                </div>
+                                </fieldset>
+                                <input type="hidden" id="form" name="form" value="group" />
+                                <input type="hidden" id="groupAction" name="action" value="created" />
+                                <input type="hidden" class="limit" id="groupLimit" name="limit" tal:attributes="value limit" />
+                            </form>
+                            <form id="application_group_menu" class="none">
+                                <fieldset>
+                                <legend id="title">Add Applications</legend>
+                                <div class="wrapper">
+                                    <ul>
+                                        <li>
+                                            <select multiple="multiple" id="application_groups" name="application_groups" size="10">
+                                                <option tal:repeat="app apps" tal:attributes="value app.id" tal:content="'%d-%s'%(app.id, app.applicationName)"></option>
+                                            </select>
+                                        </li>
+                                        <li class="add-remove">
+                                            <input type="button" class="control input add_group" id="add_application_group" value=" Add " />
+                                            <input type="button" class="control input show_groups" id="close_application_group" value=" Close " />
+                                        </li>
+                                    </ul>
+                                </div>
+                                </fieldset>
+                            </form>
+                            <form id="permission_group_menu" class="none">
+                                <fieldset>
+                                <legend id="title">Add Permission</legend>
+                                <div class="wrapper">
+                                    <ul>
+                                        <li>
+                                            <select multiple="multiple" id="permission_groups" name="permission_groups" size="10">
+                                                <option tal:repeat="perm perms" tal:attributes="value perm.id" tal:content="'%d-%s'%(perm.id, perm.permissionName)"></option>
+                                            </select>
+                                        </li>
+                                        <li class="add-remove">
+                                            <input type="button" class="control input add_group" id="add_permission_group" value=" Add " />
+                                            <input type="button" class="control input show_groups" id="close_permission_group" value=" Close " />
+                                        </li>
+                                    </ul>
+                                </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="status-panel">
+                        <div id="app-status">
+                            <span id="notifications">
+                                <img id="loading" src="/static/images/loading_bar.gif" alt="loading" />
+                                <span>Processing....Please Wait</span>
+                            </span>
+                            <span id="message" class="ui-widget"></span>
+                        </div>
+                        <div id="app-options">
+                            <ul>
+                                <li class="ignore" id="logout"><a href="/logout">Exit Tool</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+          <div class="footer">&copy; Copyright 2011, Shopzilla, Inc.</div>
+        </div>
+    </body>
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/static/js/date-validation.js"></script>
+    <script type="text/javascript" src="/static/js/user-admin.js"></script>
+    <script type="text/javascript" src="/static/js/flexigrid/flexigrid.js"></script>
+    <script type="text/javascript">
+        $(document).ready(
+            function () {
+                if ($('a.closeEl')) $('a.closeEl').bind('click', toggleContent);
+                $('input.limit').attr('value', $('#limit').val());
+                var timecolwidth = 110;
+                var userGrid = $("#users").flexigrid({
+                    url: '/REST/admin/listing?rp=<span tal:replace="limit"></span>',
+                    method: 'GET',
+                    dataType: 'json',
+                    colModel: [
+                        {display: 'ID', name: 'id', width: 50, sortable: false, align: 'center'},
+                        {display: 'Username', name: 'userName', width: 60, sortable: false, align: 'center'},
+                        {display: 'First Name', name: 'firstName', width: 100, sortable: false, align: 'center'},
+                        {display: 'Last Name', name: 'lastName', width: 100, sortable: false, align: 'center'},
+                        {display: 'Email Address', name: 'emailAddress', width: 150, sortable: false, align: 'center'},
+                        {display: 'Groups', name: 'groups', width: 165, sortable: false, align: 'center'},
+                        {display: 'Effective Start Date', name: 'effectiveStartDate', width: 93, sortable: false, align: 'center'},
+                        {display: 'Effective End Date', name: 'effectiveEndDate', width: 90, sortable: false, align: 'center'},
+                        {display: '', name: 'icons', width: 50, sortable: false, align: 'center'},
+                    ],
+                    buttons: [
+                        {name: 'New', bclass: 'add', onpress : showNewUserForm},
+                        {separator: true},
+                        {name: 'Applications', bclass: 'applications', onpress : showApplicationForm},
+                        {separator: true},
+                        {name: 'Permissions', bclass: 'permissions', onpress : showPermissionForm},
+                        {separator: true},
+                        {name: 'Groups', bclass: 'groups', onpress : showGroupForm},
+                        {separator: true},
+                        {name: 'Reload', bclass: 'reload', onpress: reloadPage},
+                        {separator: true},
+                    ],
+                    searchitems: [
+                        {display: 'First Name', name : 'firstName', isdefault: true},
+                        {display: 'Last Name', name : 'lasetName', isdefault: true},
+                        {display: 'Employee ID', name : 'userName', isdefault: true},
+                    ],
+                    sortname: 'id',
+                    sortorder: 'desc',
+                    usepager: true,
+                    title: 'Users',
+                    useRp: true,
+                    rp: <span tal:replace="limit"></span>,
+                    rpOptions: [15,30,45,60,100],
+                    showTableToggleBtn: false,
+                    showToggleBtn: false,
+                    width: $(window).width()-40,
+                    height: $(window).height()-250,
+                    singleSelect: true,
+                    resizable: false,
+                });
+            });
+        var resizeTimer;
+        $(window).resize(function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                $(".flexigrid").width($(window).width()-40);
+                $("#users").width($(".flexigrid").width()-17);
+                $(".hDivBox table").width($(".hDiv").width()-15);
+                $(".bDiv").height($(window).height()-250);
+            }, 50);
+        });
+    </script>
+</html>
