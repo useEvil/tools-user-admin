@@ -293,7 +293,7 @@
             </div>
         </div>
         <div id="footer">
-          <div class="footer">&copy; Copyright 2011, Shopzilla, Inc.</div>
+          <div class="footer">&copy; Copyright 2011</div>
         </div>
     </body>
     <script type="text/javascript" src="/static/js/jquery.min.js"></script>

@@ -1,12 +1,3 @@
-'''
-Copyright (C) 2004 - 2010 Shopzilla, Inc. 
-All rights reserved. Unauthorized disclosure or distribution is prohibited.
-
-Authorization decorator that uses the new extended authorization point.
-Created on Dec 1, 2010
-
-@author: vigumnov
-'''
 import os
 import logging
 import simplejson
